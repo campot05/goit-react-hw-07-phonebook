@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import css from './ContactForm.module.css';
 import { Notify } from 'notiflix';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact, fetchContactsList } from 'redux/contacts/operations';
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,7 @@ function ContactForm() {
   });
 
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts.items);
 
   useEffect(() => {
     dispatch(fetchContactsList());
@@ -25,6 +26,15 @@ function ContactForm() {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    for (const contact of contacts) {
+      if (
+        formData.name.toLocaleLowerCase() === contact.name.toLocaleLowerCase()
+      ) {
+        return Notify.failure(`${formData.name} is already in contacts.`);
+      }
+    }
+
     dispatch(addContact(formData));
     reset();
   };
