@@ -1,27 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import css from './ContactForm.module.css';
 import { Notify } from 'notiflix';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact, getContacts } from 'redux/slice';
-import { nanoid } from '@reduxjs/toolkit';
-// ======
-// import { addContact1 } from 'redux1/contacts/operations';
-// fetchContactsList
-// ======
+import { useDispatch } from 'react-redux';
+import { addContact, fetchContactsList } from 'redux/contacts/operations';
 function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     number: '',
   });
 
-  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
-  //   useEffect(() => {
-  //     const test = dispatch(fetchContactsList());
-  //     console.log(test);
-  //     console.log('получаем список с бекенда ');
-  //   }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchContactsList());
+  }, [dispatch]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -33,13 +25,7 @@ function ContactForm() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    //  dispatch(addContact1(formData));
-    for (const contact of contacts) {
-      if (contact.name.toLowerCase() === formData.name.toLowerCase()) {
-        return Notify.failure(`${formData.name} is already in contacts.`);
-      }
-    }
-    dispatch(addContact({ ...formData, id: nanoid() }));
+    dispatch(addContact(formData));
     reset();
   };
 

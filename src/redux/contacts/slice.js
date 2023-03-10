@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContactsList, addContact1, deleteContact } from './operations';
+import { fetchContactsList, addContact, deleteContact } from './operations';
 const initialState = {
   contacts: {
     items: [],
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const contactsSlice = createSlice({
-  name: contacts,
+  name: 'contacts',
   initialState: initialState,
   extraReducers: {
     [fetchContactsList.pending]: store => {
@@ -25,29 +25,29 @@ const contactsSlice = createSlice({
       store.contacts.isLoading = false;
       store.contacts.error = payload;
     },
-    [addContact1.pending]: store => {
+    [addContact.pending]: store => {
       store.contacts.isLoading = true;
       store.contacts.error = null;
     },
-    [addContact1.fulfilled]: (store, { payload }) => {
+    [addContact.fulfilled]: (store, { payload }) => {
       store.contacts.isLoading = false;
       store.contacts.items.push(payload);
     },
-    [addContact1.rejected]: (store, { payload }) => {
+    [addContact.rejected]: (store, { payload }) => {
       store.contacts.isLoading = false;
       store.contacts.error = payload;
     },
-    [deleteContact1.pending]: store => {
+    [deleteContact.pending]: store => {
       store.contacts.isLoading = true;
       store.contacts.error = null;
     },
-    [deleteContact1.fulfilled]: (store, { payload }) => {
+    [deleteContact.fulfilled]: (store, { payload }) => {
       store.contacts.isLoading = false;
       store.contacts.items = store.contacts.items.filter(
         item => item.id !== payload
       );
     },
-    [deleteContact1.rejected]: (store, { payload }) => {
+    [deleteContact.rejected]: (store, { payload }) => {
       store.contacts.isLoading = false;
       store.contacts.error = payload;
     },
