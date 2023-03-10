@@ -7,9 +7,14 @@ export const ContactList = () => {
   const dispatch = useDispatch();
   const data = useSelector(state => state.contacts.contacts.items);
 
+  const contacts = useSelector(state => state.contacts.contacts.items);
+  const filter = useSelector(state => state.contacts.filter);
+  const filteredContacts = contacts.filter(el =>
+    el.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase().trim())
+  );
   return (
     <ul className={css.list}>
-      {data.map(({ id, name, number }) => {
+      {filteredContacts.map(({ id, name, number }) => {
         return (
           <li key={id} className={css.name}>
             {name}: {number}
